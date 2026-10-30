@@ -1,0 +1,14 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Go build output and local databases
+bin/
+*.db
+*.db-shm
+*.db-wal
+
+# Misc
+.DS_Store
+*.log
