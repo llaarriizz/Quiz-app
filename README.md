@@ -41,6 +41,8 @@ Built with **Go**, **React**, **TypeScript**, **Tailwind CSS**, **Vite**, and
 │       ├── lib/             # API client, formatting, hooks, sample data
 │       └── pages/           # home, import, deck, quiz, results, history
 ├── examples/biology.csv
+├── .github/workflows/pages.yml  # GitHub Pages deployment
+├── render.yaml                  # Render blueprint for the API
 ├── Makefile
 └── README.md
 ```
@@ -88,6 +90,71 @@ Flags:
 | `-addr`    | `:8080`        | HTTP listen address                            |
 | `-db`      | `quiz.db`      | SQLite database path                           |
 | `-static`  | _(empty)_      | Directory with the built frontend (SPA fallback) |
+
+## Deployment
+
+The deployment split is:
+
+- **Frontend** — the React build on GitHub Pages.
+- **API** — the Go server on Render (or any host that can run a Go binary).
+
+GitHub Pages only serves static files, so the API needs a separate host. The
+frontend reads its API location from the `VITE_API_BASE_URL` build variable.
+
+### 1. Deploy the API
+
+The repository includes a Render blueprint in `render.yaml`.
+
+1. Push this repository to GitHub.
+2. In [Render](https://render.com), choose **New → Blueprint**, connect the
+   repository, and apply the blueprint. This creates the `recall-api` web
+   service.
+3. Wait for the deploy, then copy the service URL, for example
+   `https://recall-api.onrender.com`.
+4. Check it: `curl https://recall-api.onrender.com/api/health`.
+
+Render injects `$PORT`; the blueprint starts the server with
+`./recall -addr :$PORT -db quiz.db`. The SQLite file lives on the instance's
+ephemeral disk.
+
+### 2. Configure the frontend
+
+1. In the GitHub repository, open **Settings → Secrets and variables →
+   Actions → Variables**.
+2. Add a repository variable named `API_BASE_URL` with the Render service URL
+   from step 1. No trailing slash is needed (one is stripped if present).
+3. Make sure Pages is enabled: **Settings → Pages → Build and deployment →
+   Source: GitHub Actions**. The workflow also attempts to enable it.
+
+### 3. Deploy
+
+Push to `main` (or run the **Deploy frontend to GitHub Pages** workflow
+manually). The workflow:
+
+- builds the frontend under the `/<repo>/` base path,
+- injects `API_BASE_URL` as `VITE_API_BASE_URL`,
+- copies `index.html` to `404.html` so client-side routes survive a refresh,
+- publishes the `frontend/dist` artifact to Pages.
+
+The site is served at `https://<user>.github.io/<repo>/`.
+
+If `API_BASE_URL` is unset, the workflow still deploys the frontend but prints a
+warning, and API calls show an explanatory error. Add the variable and re-run
+the workflow.
+
+### Deployment notes
+
+- **Private repositories:** GitHub Pages from a private repository requires a
+  paid GitHub plan (Pro, Team, or Enterprise). The published site itself is
+  public even when the repository is private.
+- **Render free tier:** the service spins down when idle and has no persistent
+  disk, so decks and history are lost on restarts and deploys. Attach a paid
+  disk mounted at `/var/data` and start with `-db /var/data/quiz.db` to persist
+  SQLite data.
+- **Cold starts:** the first request to a sleeping Render free instance can take
+  several seconds.
+- **No authentication:** anyone with the URL can import decks and read history.
+  Do not store private study material on a public deployment.
 
 ## CSV format
 

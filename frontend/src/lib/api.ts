@@ -10,6 +10,18 @@ export class ApiError extends Error {
   }
 }
 
+// Empty in local development (Vite proxies /api to the Go server). Set
+// VITE_API_BASE_URL at build time when the frontend and API are on different
+// origins, e.g. GitHub Pages + Render.
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL ?? "").replace(
+  /\/+$/,
+  "",
+);
+
+function apiUrl(path: string): string {
+  return `${API_BASE_URL}${path}`;
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   if (init?.body) {
@@ -18,7 +30,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
   let response: Response;
   try {
-    response = await fetch(path, { ...init, headers });
+    response = await fetch(apiUrl(path), { ...init, headers });
   } catch {
     throw new ApiError(
       "Could not reach the server. Make sure the Go API is running.",
@@ -28,6 +40,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
   if (!response.ok) {
     let message = `Request failed (${response.status})`;
+    if (response.status === 404) {
+      message =
+        "API endpoint not found. If this site is hosted on GitHub Pages, set the API_BASE_URL repository variable and redeploy.";
+    }
     try {
       const data = (await response.json()) as { error?: string };
       if (data.error) message = data.error;
