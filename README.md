@@ -45,6 +45,18 @@ Built with **Go**, **React**, **TypeScript**, **Tailwind CSS**, **Vite**, and
 └── README.md
 ```
 
+## Quick start
+
+Build the frontend and the server, then run the binary:
+
+```bash
+make build
+./bin/quiz -static ./frontend/dist -db ./quiz.db -addr :8080
+```
+
+Open <http://localhost:8080>. The database file is created automatically and is
+ignored by Git.
+
 ## Requirements
 
 - Go 1.27+
@@ -74,12 +86,9 @@ The SQLite database defaults to `backend/quiz.db` and is created automatically.
 
 ## Production build
 
-```bash
-make build
-./bin/quiz -static ./frontend/dist -db ./quiz.db -addr :8080
-```
-
-Then open <http://localhost:8080>.
+`make build` writes the frontend bundle to `frontend/dist` and the server
+binary to `bin/quiz`. Run it with `-static` pointing at the bundle (see
+[Quick start](#quick-start)).
 
 Flags:
 
@@ -162,6 +171,36 @@ make test
   (import → generate → submit → review → history) using a temporary SQLite
   database.
 - Frontend: formatting and scoring helpers with Vitest.
+
+To smoke-test a running server manually:
+
+```bash
+# Import a deck
+curl -X POST http://localhost:8080/api/decks \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"Smoke test","csv":"question,answer\nCapital of Japan?,Tokyo\n"}'
+
+# Generate a quiz (use the deck id from the response)
+curl -X POST http://localhost:8080/api/decks/<deck-id>/quizzes \
+  -H 'Content-Type: application/json' \
+  -d '{"mode":"written","count":1}'
+
+# Submit an answer (use the quiz id and question id from the response)
+curl -X POST http://localhost:8080/api/quizzes/<quiz-id>/submit \
+  -H 'Content-Type: application/json' \
+  -d '{"answers":{"q1":"Tokyo"},"durationMs":12000}'
+
+# Review history
+curl http://localhost:8080/api/history?limit=5
+```
+
+The health check, the built SPA, and its client-side routes are also available:
+
+```bash
+curl http://localhost:8080/api/health   # {"status":"ok"}
+curl -I http://localhost:8080/          # 200 text/html
+curl -I http://localhost:8080/history   # 200 text/html (SPA fallback)
+```
 
 ## Design notes
 

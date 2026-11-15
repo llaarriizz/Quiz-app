@@ -64,8 +64,6 @@ func GenerateQuestions(cards []model.Card, mode string, count int, rng *rand.Ran
 			if i%2 == 0 && canMakeChoices(card, cards) {
 				kind = model.KindMultipleChoice
 			}
-		case model.ModeWritten:
-			kind = model.KindWritten
 		}
 
 		q := model.StoredQuestion{

@@ -120,14 +120,6 @@ export function ChevronLeftIcon(props: IconProps) {
   );
 }
 
-export function ChevronRightIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="m9 18 6-6-6-6" />
-    </Icon>
-  );
-}
-
 export function PlayIcon(props: IconProps) {
   return (
     <Icon {...props}>
@@ -142,15 +134,6 @@ export function FileTextIcon(props: IconProps) {
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
       <path d="M14 2v6h6" />
       <path d="M8 13h8M8 17h5" />
-    </Icon>
-  );
-}
-
-export function AlertCircleIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 8v4M12 16h.01" />
     </Icon>
   );
 }
@@ -205,16 +188,6 @@ export function ShuffleIcon(props: IconProps) {
   );
 }
 
-export function TargetIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <circle cx="12" cy="12" r="10" />
-      <circle cx="12" cy="12" r="6" />
-      <circle cx="12" cy="12" r="2" />
-    </Icon>
-  );
-}
-
 export function ClockIcon(props: IconProps) {
   return (
     <Icon {...props}>
@@ -239,15 +212,6 @@ export function LightbulbIcon(props: IconProps) {
       <path d="M9 18h6" />
       <path d="M10 22h4" />
       <path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V18h6v-1.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z" />
-    </Icon>
-  );
-}
-
-export function ArrowUpRightIcon(props: IconProps) {
-  return (
-    <Icon {...props}>
-      <path d="M7 17 17 7" />
-      <path d="M7 7h10v10" />
     </Icon>
   );
 }

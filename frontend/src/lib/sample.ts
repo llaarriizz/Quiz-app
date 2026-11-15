@@ -9,7 +9,3 @@ What controls what enters and leaves a cell?,Cell membrane,Acts as a selectively
 What is the basic unit of life?,The cell,All living organisms are made of one or more cells.
 Which organelle packages and ships proteins?,Golgi apparatus,Modifies and sorts proteins before they are sent out.
 Which organelle breaks down waste?,Lysosome,Contains digestive enzymes that recycle cellular material.`;
-
-export const CSV_FORMAT_EXAMPLE = `question,answer,explanation
-What is 2 + 2?,4,Basic addition.
-Capital of Japan?,Tokyo,Tokyo became the capital in 1868.`;

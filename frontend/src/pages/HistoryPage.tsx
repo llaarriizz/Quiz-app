@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import {
   ArrowRightIcon,
+  BookOpenIcon,
   HistoryIcon,
   PlusIcon,
 } from "../components/icons";
@@ -186,7 +187,7 @@ export function HistoryPage() {
             description="Finish a quiz and it will show up here, complete with your score, timing and a question-by-question review."
             action={
               <LinkButton to="/">
-                <BookIcon />
+                <BookOpenIcon className="h-4 w-4" />
                 Browse decks
               </LinkButton>
             }
@@ -230,23 +231,5 @@ export function HistoryPage() {
         </>
       )}
     </Container>
-  );
-}
-
-function BookIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="h-4 w-4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2Z" />
-      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7Z" />
-    </svg>
   );
 }

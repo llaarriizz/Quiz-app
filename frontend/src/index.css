@@ -15,10 +15,8 @@
   --color-brand: #0f766e;
   --color-brand-dark: #115e59;
   --color-brand-soft: #d9ece8;
-  --color-accent: #c2710c;
 
   --animate-fade-up: fade-up 0.45s ease-out both;
-  --animate-fade-in: fade-in 0.3s ease-out both;
 }
 
 @keyframes fade-up {
@@ -29,15 +27,6 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }
 
